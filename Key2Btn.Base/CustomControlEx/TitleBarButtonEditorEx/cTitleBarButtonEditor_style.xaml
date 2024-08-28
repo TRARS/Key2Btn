@@ -1,0 +1,161 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:local="clr-namespace:Key2Btn.Base.CustomControlEx.TitleBarButtonEditorEx" 
+                    xmlns:normalbuttonex="clr-namespace:Key2Btn.Base.CustomControlExBase.NormalButtonEx" 
+                    xmlns:sliderex="clr-namespace:Key2Btn.Base.CustomControlExBase.SliderEx">
+
+    <ControlTemplate x:Key="UnknownEditor">
+        <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}" Margin="3">
+            <TextBlock Text="{Binding TargetName, 
+                                      RelativeSource={RelativeSource AncestorType={x:Type local:cTitleBarButtonEditor}},
+                                      StringFormat={}未实现用于\'{0}\'的Editor}"
+                       Foreground="White"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="GridBtnEditor">
+        <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}"
+              Margin="3" MinWidth="20" MinHeight="10">
+            
+            <StackPanel Orientation="Vertical">
+                <!--<TextBlock Text="{Binding TargetName, RelativeSource={RelativeSource AncestorType={x:Type local:cTitleBarButtonEditor}}}" Foreground="White" HorizontalAlignment="Center"/>-->
+
+                <Grid Margin="0,0,0,2" DataContext="{Binding ContextMenuSource}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <normalbuttonex:cNormalButton Grid.Column="0" Grid.Row="0" Text="移至主屏幕" HorizontalAlignment="Stretch" Margin="0,0,1,1"
+                                                  Command="{Binding MoveToPrimaryScreenCommand, Mode=OneWay}"/>
+                    <normalbuttonex:cNormalButton Grid.Column="1" Grid.Row="0" Text="移至副屏幕" HorizontalAlignment="Stretch" Margin="1,0,0,1"
+                                                  Command="{Binding MoveToSecondaryScreenCommand, Mode=OneWay}"/>
+                    <normalbuttonex:cNormalButton Grid.Column="0" Grid.Row="1" Text="倾斜⇔摆正" HorizontalAlignment="Stretch" Margin="0,1,1,0"
+                                                  Command="{Binding ToggleTiltOrStraightenCommand, Mode=OneWay}"/>
+                    <normalbuttonex:cNormalButton Grid.Column="1" Grid.Row="1" Text="黑色⇔白色" HorizontalAlignment="Stretch" Margin="1,1,0,0"
+                                                  Command="{Binding ToggleBlackOrWhiteCommand, Mode=OneWay}"/>
+                </Grid>
+
+                <Grid Margin="0,0,0,2" DataContext="{Binding ContextMenuSource}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" MinWidth="32"/>
+                        <ColumnDefinition Width="*"    MinWidth="100"/>
+                        <ColumnDefinition Width="auto" MinWidth="32"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="笔粗细度" Foreground="White" Margin="3,2"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="不透明度" Foreground="White" Margin="3,2"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="单位尺寸" Foreground="White" Margin="3,2"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="模糊半径" Foreground="White" Margin="3,2"/>
+
+                    <sliderex:cSlider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"
+                                      Maximum="10" Minimum="0" 
+                                      TickFrequency="0.05" LargeChange="0.05" SmallChange="0.05"
+                                      IsSnapToTickEnabled ="True"
+                                      DefalutValue="{Binding PenSize, Mode=OneTime}"
+                                      Value="{Binding PenSize}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding SliderLoadedCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseWheel">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseWheelCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseRightButtonUp">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseRightButtonUpCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </sliderex:cSlider>
+                    <sliderex:cSlider Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"
+                                      Maximum="1" Minimum="0" 
+                                      TickFrequency="0.05" LargeChange="0.05" SmallChange="0.05"
+                                      IsSnapToTickEnabled ="True"
+                                      DefalutValue="{Binding GridOpacity, Mode=OneTime}"
+                                      Value="{Binding GridOpacity}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding SliderLoadedCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseWheel">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseWheelCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseRightButtonUp">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseRightButtonUpCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </sliderex:cSlider>
+                    <sliderex:cSlider Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+                                      Maximum="256" Minimum="128" 
+                                      TickFrequency="1" LargeChange="1" SmallChange="1"
+                                      IsSnapToTickEnabled ="True"
+                                      DefalutValue="{Binding GridSize, Mode=OneTime}"
+                                      Value="{Binding GridSize}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding SliderLoadedCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseWheel">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseWheelCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseRightButtonUp">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseRightButtonUpCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </sliderex:cSlider>
+                    <sliderex:cSlider Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"
+                                      Maximum="10" Minimum="0" 
+                                      TickFrequency="0.5" LargeChange="0.5" SmallChange="0.5"
+                                      IsSnapToTickEnabled ="True"
+                                      DefalutValue="{Binding GridBlurRadius, Mode=OneTime}"
+                                      Value="{Binding GridBlurRadius}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding SliderLoadedCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseWheel">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseWheelCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="PreviewMouseRightButtonUp">
+                                <i:InvokeCommandAction Command="{Binding SliderPreviewMouseRightButtonUpCommand}" PassEventArgsToCommand="True"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </sliderex:cSlider>
+
+                    <TextBlock Grid.Column="2" Grid.Row="0" Foreground="White" Margin="3,2" Text="{Binding PenSize, Mode=OneWay}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Foreground="White" Margin="3,2" Text="{Binding GridOpacity, Mode=OneWay}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Foreground="White" Margin="3,2" Text="{Binding GridSize, Mode=OneWay}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="3" Foreground="White" Margin="3,2" Text="{Binding GridBlurRadius, Mode=OneWay}"/>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <normalbuttonex:cNormalButton Text="Close" HorizontalAlignment="Stretch"
+                                                  Command="{Binding CloseMenuCommand, Mode=OneWay}"/>
+                </Grid>
+
+            </StackPanel>
+        </Grid>
+    </ControlTemplate>
+    
+    <!--选择模板-->
+    <Style TargetType="{x:Type local:cTitleBarButtonEditor}">
+        <Setter Property="Template" Value="{StaticResource UnknownEditor}"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding TargetName, RelativeSource={RelativeSource Self}}" Value="GridBtn">
+                <Setter Property="Template" Value="{StaticResource GridBtnEditor}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

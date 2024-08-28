@@ -1,0 +1,115 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:local="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonGroupEx"
+                    xmlns:effect="clr-namespace:Key2Btn.Base.CustomEffect" 
+                    xmlns:attached="clr-namespace:Key2Btn.Base.Helper.AttachedProperty"
+                    xmlns:macrobuttonex="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonEx">
+
+    <Style TargetType="{x:Type local:cMacroButtonGroupContainer}">
+        <Style.Resources>
+            <Style x:Key="MacroButtonStyle" TargetType="{x:Type ContentPresenter}">
+                <Setter Property="attached:WrapPanelHelper.LineIndex" Value="0"/>
+                <Setter Property="attached:WrapPanelHelper.IsFirstInLine" Value="False"/>
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <macrobuttonex:cMacroButton DataContext="{Binding}"
+                                                        PosX="{Binding (ItemsControl.AlternationIndex), 
+                                                                       RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                                       Mode=OneWay}"
+                                                        PosY="{Binding Path=(attached:UIElementHelper.AlternationIndexAttached), 
+                                                                       RelativeSource={RelativeSource AncestorType=Panel},
+                                                                       Mode=OneWay}"
+                                                        attached:WrapPanelHelper.LineIndex="{Binding Path=(attached:WrapPanelHelper.LineIndex), 
+                                                                                                     RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}},
+                                                                                                     Mode=OneWay}"
+                                                        attached:WrapPanelHelper.IsFirstInLine="{Binding Path=(attached:WrapPanelHelper.IsFirstInLine), 
+                                                                                                         RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}, 
+                                                                                                         Mode=OneWay}"/>
+
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="MacroButtonContainerStyle" TargetType="{x:Type ContentPresenter}">
+                <Style.Resources>
+                    <!--Debug用-->
+                    <DataTemplate x:Key="DebugTemplate" DataType="{x:Type ContentPresenter}">
+                        <ItemsControl ItemsSource="{Binding}"
+                                      AlternationCount="100001">
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                                    <Grid x:Name="hitbox">
+                                        <!--ItemsHost-->
+                                        <local:cWrapPanel IsItemsHost="True" x:Name ="cvsp"
+                                                          Orientation="Horizontal" 
+                                                          attached:UIElementHelper.AlternationIndexAttached="{Binding Path=(ItemsControl.AlternationIndex), 
+                                                                                                                      RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                                                                                      Mode=OneWay}"/>
+                                        <!--HitBox-->
+                                        <Border Background="Transparent"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemContainerStyle>
+                                <StaticResource ResourceKey="MacroButtonStyle"/>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </DataTemplate>
+                    
+                    <!--Release用-->
+                    <DataTemplate x:Key="ReleaseTemplate" DataType="{x:Type ContentPresenter}">
+                        <ItemsControl ItemsSource="{Binding}"
+                                      AlternationCount="100001">
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                                    <Grid x:Name="hitbox">
+                                        <!--ItemsHost-->
+                                        <local:cWrapPanel IsItemsHost="True" x:Name ="cvsp"
+                                                          Orientation="Horizontal" 
+                                                          Grid.IsSharedSizeScope="True"
+                                                          attached:UIElementHelper.AlternationIndexAttached="{Binding Path=(ItemsControl.AlternationIndex), 
+                                                                                                                      RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                                                                                      Mode=OneWay}"/>
+                                        <!--HitBox-->
+                                        <Border Background="Transparent"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemContainerStyle>
+                                <StaticResource ResourceKey="MacroButtonStyle"/>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </DataTemplate>
+                </Style.Resources>
+                
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding DataContext.DebugMode, RelativeSource={RelativeSource AncestorType={x:Type local:cMacroButtonGroup}}}" Value="True">
+                        <Setter Property="ContentTemplate" Value="{StaticResource DebugTemplate}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DataContext.DebugMode, RelativeSource={RelativeSource AncestorType={x:Type local:cMacroButtonGroup}}}" Value="False">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ReleaseTemplate}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+        
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AlternationCount" Value="100001"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cMacroButtonGroupContainer}">
+                    <!--ItemsHost-->
+                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Vertical" IsVirtualizing="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <StaticResource ResourceKey="MacroButtonContainerStyle"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

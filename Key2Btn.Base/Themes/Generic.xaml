@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/MacroButtonEditorEx/cMacroButtonEditor_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/MacroButtonEx/cMacroButton_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/MacroButtonGroupEx/cMacroButtonGroup_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/MacroButtonGroupEx/cMacroButtonGroupContainer_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/TitleBarButtonEditorEx/cTitleBarButtonEditor_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlEx/TitleBarButtonEx/cTitleBarButton_style.xaml"/>
+
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/ContextMenuEx/cContextMenu_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/HorizontalFoldableContainerEx/cHorizontalFoldableContainer_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/NormalButtonEx/cNormalButton_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/SliderEx/cSlider_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/TextBoxEx/cActionKeySelector_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/TextBoxEx/cColorPicker_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/TextBoxEx/cHotKeySelector_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/TextBoxEx/cIntegerUpDown_style.xaml"/>
+        <ResourceDictionary Source="/Key2Btn.Base;component/CustomControlExBase/TextBoxEx/cTextBox_style.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

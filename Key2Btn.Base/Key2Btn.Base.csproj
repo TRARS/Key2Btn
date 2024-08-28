@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CustomEffect\GrayEffect.ps" />
+    <None Remove="CustomEffect\HPivotEffect.ps" />
+    <None Remove="CustomEffect\TranslationalEffect.ps" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ColorHelper" Version="1.8.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+    <PackageReference Include="Stateless" Version="5.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="CustomEffect\GrayEffect.ps" />
+    <Resource Include="CustomEffect\HPivotEffect.ps" />
+    <Resource Include="CustomEffect\InvertedColorEffect.ps" />
+    <Resource Include="CustomEffect\TranslationalEffect.ps" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,159 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:local="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonGroupEx"
+                    xmlns:effect="clr-namespace:Key2Btn.Base.CustomEffect" 
+                    xmlns:macrobuttonex="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonEx">
+    
+    <local:cMacroButtonGroup_converter_pointnullcheck x:Key="cMacroButtonGroup_converter_pointnullcheck"/>
+    <local:cMacroButtonGroup_converter_bool2visibility x:Key="cMacroButtonGroup_converter_bool2visibility"/>
+    
+    <Style TargetType="{x:Type local:cMacroButtonGroup}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cMacroButtonGroup}">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}"
+                            Margin="2">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!--容器标题-->
+                            <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Foreground="White" Background="Black"
+                                       Text="{Binding Type}" 
+                                       Visibility="{Binding DebugMode, Converter={StaticResource cMacroButtonGroup_converter_bool2visibility}}"/>
+
+                            <!--背景层-->
+                            <Border Grid.Row="1" x:Name="groupBackground"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1"
+                                    CornerRadius="2.5"/>
+
+                            <!--外玻璃层-->
+                            <Border Grid.Row="1">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeave">
+                                        <i:InvokeCommandAction Command="{Binding ContainerMouseLeaveCommand}"
+                                                               PassEventArgsToCommand="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                                <!--内玻璃层-->
+                                <ContentControl HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Top"
+                                                Margin="1"
+                                                IsHitTestVisible="True">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding PreviewMouseLeftButtonDownCommand}"
+                                                                   PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                            <i:InvokeCommandAction Command="{Binding PreviewMouseLeftButtonUpCommand}"
+                                                                   PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="PreviewMouseMove">
+                                            <i:InvokeCommandAction Command="{Binding PreviewMouseMoveCommand}"
+                                                                   PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="MouseMove">
+                                            <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"
+                                                                   PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="PreviewMouseRightButtonUp">
+                                            <i:InvokeCommandAction Command="{Binding PreviewMouseRightButtonUpCommand}"
+                                                                   PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                    <Grid Background="Transparent">
+                                        <!--按钮层-->
+                                        <local:cMacroButtonGroupContainer IsDebugMode="{Binding DebugMode}"
+                                                                          ItemsSource="{Binding ItemsSourceGroup}"
+                                                                          IsHitTestVisible="False"/>
+
+                                        <!--两点连线-->
+                                        <Canvas ClipToBounds="True" IsHitTestVisible="False">
+                                            <Path StrokeThickness="1.5" 
+                                                  StrokeStartLineCap="Round"
+                                                  StrokeEndLineCap="Round"
+                                                  Opacity="{Binding TraceLineOpacity}">
+                                                <Path.Stroke>
+                                                    <LinearGradientBrush StartPoint="{Binding TraceLineStartPoint, 
+                                                                                              Converter={StaticResource cMacroButtonGroup_converter_pointnullcheck}, 
+                                                                                              Mode=OneWay}" 
+                                                                         EndPoint="{Binding TraceLineEndPoint, 
+                                                                                            Converter={StaticResource cMacroButtonGroup_converter_pointnullcheck}, 
+                                                                                            Mode=OneWay}" 
+                                                                         MappingMode="Absolute" >
+                                                        <GradientStop Color="DodgerBlue" Offset="0"/>
+                                                        <GradientStop Color="Red" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Path.Stroke>
+                                                <Path.Data>
+                                                    <PathGeometry>
+                                                        <PathGeometry.Figures>
+                                                            <PathFigureCollection>
+                                                                <PathFigure StartPoint="{Binding TraceLineStartPoint,
+                                                                                                 Converter={StaticResource cMacroButtonGroup_converter_pointnullcheck}, 
+                                                                                                 Mode=OneWay}">
+                                                                    <LineSegment Point="{Binding TraceLineEndPoint,
+                                                                                                 Converter={StaticResource cMacroButtonGroup_converter_pointnullcheck},
+                                                                                                 Mode=OneWay}"/>
+                                                                </PathFigure>
+                                                            </PathFigureCollection>
+                                                        </PathGeometry.Figures>
+                                                    </PathGeometry>
+                                                </Path.Data>
+                                                <Path.Effect>
+                                                    <effect:TranslationalEffect Threshold="0.5"/>
+                                                </Path.Effect>
+                                            </Path>
+                                        </Canvas>
+                                    </Grid>
+                                </ContentControl>
+                            </Border>
+
+                            <!--打印层-->
+                            <StackPanel Grid.Row="2" Orientation="Vertical"
+                                        Visibility="{Binding DebugMode, Converter={StaticResource cMacroButtonGroup_converter_bool2visibility}}">
+                                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                            Foreground="White" 
+                                            Background="Black">
+                                    <Run Text="{Binding Message, Mode=OneWay}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                        
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource Self}}" Value="{x:Static local:ButtonGroupType.MacroButtonContainer}">
+                            <Setter Property="BorderBrush" Value="Red" TargetName="groupBackground"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource Self}}" Value="{x:Static local:ButtonGroupType.SimpleKeyboardContainer}">
+                            <Setter Property="BorderBrush" Value="DeepSkyBlue" TargetName="groupBackground"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding DataContext.IsTesterMode, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="False">
+                            <Setter Property="BorderBrush" Value="Transparent" TargetName="groupBackground"/>
+                            <Setter Property="Margin" Value="0" TargetName="border"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

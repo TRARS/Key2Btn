@@ -1,0 +1,252 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:local="clr-namespace:Key2Btn.Base.CustomControlExBase.TextBoxEx"
+                    xmlns:contextmenuex="clr-namespace:Key2Btn.Base.CustomControlExBase.ContextMenuEx" xmlns:proxy="clr-namespace:Key2Btn.Base.Helper.ExClass">
+
+    <local:cHotKeySelector_converter_diameter2height x:Key="cHotKeySelector_converter_diameter2height"/>
+    <local:cHotKeySelector_converter_diameter2width x:Key="cHotKeySelector_converter_diameter2width"/>
+    <local:cHotKeySelector_converter_radius2cornerradius x:Key="cHotKeySelector_converter_radius2cornerradius"/>
+    <local:cHotKeySelector_converter_transformXcalculator x:Key="cHotKeySelector_converter_transformXcalculator"/>
+    <local:cHotKeySelector_converter_diameterDiet x:Key="cHotKeySelector_converter_diameterDiet"/>
+    <local:cHotKeySelector_converter_keycodetype2bool x:Key="cHotKeySelector_converter_keycodetype2bool"/>
+    <local:cHotKeySelector_converter_separator2brush x:Key="cHotKeySelector_converter_separator2brush"/>
+    <local:cHotKeySelector_converter_thicknessminus x:Key="cHotKeySelector_converter_thicknessminus"/>
+    
+    <Style TargetType="{x:Type local:cHotKeySelector}">
+        <Style.Resources>
+            <!--滑块按钮-->
+            <Style x:Key="ToggleButtonStyle" BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="{x:Type ToggleButton}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border Background="Transparent">
+                                <Border Padding="0,0,0,0" Background="{Binding BackgroundColor, RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}">
+                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                        <Grid.Resources>
+                                            <proxy:BindingProxy x:Key="proxy4hks" Data="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}, Mode=OneWay}"/>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="{Binding DotDiameter,
+                                                                              RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}, 
+                                                                              Converter={StaticResource cHotKeySelector_converter_diameter2width}}"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--Left 滑块本体-->
+                                        <Grid x:Name="Left" Grid.Column="0">
+                                            <Grid.Height>
+                                                <MultiBinding Converter="{StaticResource cHotKeySelector_converter_diameter2height}">
+                                                    <Binding Path="BorderThickness" ElementName="slider"/>
+                                                    <Binding Path="DotDiameter" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                </MultiBinding>
+                                            </Grid.Height>
+
+                                            <Border x:Name="fix"
+                                                    BorderThickness="{Binding DotBorderThickness,
+                                                                              RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}},
+                                                                              Converter={StaticResource cHotKeySelector_converter_thicknessminus}}"
+                                                    Background="{Binding Background, ElementName=slider}"
+                                                    CornerRadius="{Binding CornerRadius, ElementName=slider}"/>
+                                            <Border x:Name="slider" 
+                                                    BorderThickness="{Binding DotBorderThickness,
+                                                                              RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}">
+                                                <Border.BorderBrush>
+                                                    <MultiBinding Converter="{StaticResource cHotKeySelector_converter_separator2brush}" Mode="OneWay">
+                                                        <Binding Path="Offset" ElementName="separatorL"/>
+                                                        <Binding Path="Offset" ElementName="separatorR"/>
+                                                        <Binding Path="Color" ElementName="separatorL"/>
+                                                        <Binding Path="Color" ElementName="separatorR"/>
+                                                    </MultiBinding>
+                                                </Border.BorderBrush>
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Offset="0.0" 
+                                                                      Color="{Binding Data.SliderBackgroundColor, Source={StaticResource proxy4hks}}"/>
+                                                        <GradientStop x:Name="separatorL"
+                                                                      Offset="{Binding SliderSeparatorOffset, RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}" 
+                                                                      Color="{Binding Data.SliderBackgroundColor, Source={StaticResource proxy4hks}}"/>
+                                                        <GradientStop x:Name="separatorR"
+                                                                      Offset="{Binding SliderSeparatorOffset, RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}" 
+                                                                      Color="#FF202020"/>
+                                                        <GradientStop Offset="1.0" 
+                                                                      Color="#FF202020"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <Border.CornerRadius>
+                                                    <MultiBinding Converter="{StaticResource cHotKeySelector_converter_radius2cornerradius}">
+                                                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                                                        <Binding Path="DotCornerRadius" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                    </MultiBinding>
+                                                </Border.CornerRadius>
+
+                                                <!--dot-->
+                                                <Border Background="White" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                        Height="{Binding Width, RelativeSource={RelativeSource Self}}"
+                                                        CornerRadius="{Binding DotCornerRadius,
+                                                                               RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}">
+                                                    <Border.Width>
+                                                        <MultiBinding Converter="{StaticResource cHotKeySelector_converter_diameterDiet}">
+                                                            <Binding Path="DotDiameter" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                            <Binding Path="DotDiet" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                        </MultiBinding>
+                                                    </Border.Width>
+                                                    <Border.RenderTransform>
+                                                        <TransformGroup>
+                                                            <TranslateTransform Y="0">
+                                                                <TranslateTransform.X>
+                                                                    <MultiBinding Converter="{StaticResource cHotKeySelector_converter_transformXcalculator}">
+                                                                        <Binding Path="DotTransformX" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                                        <Binding Path="DotDiet" RelativeSource="{RelativeSource AncestorType={x:Type local:cHotKeySelector}}"/>
+                                                                    </MultiBinding>
+                                                                </TranslateTransform.X>
+                                                            </TranslateTransform>
+                                                        </TransformGroup>
+                                                    </Border.RenderTransform>
+                                                </Border>
+                                            </Border>
+                                        </Grid>
+                                        
+                                    </Grid>
+                                </Border>
+                            </Border>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </Style.Resources>
+        
+        <!--cHotKeySelector本体-->
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="MinWidth" Value="96"/>
+        <Setter Property="MinHeight" Value="25"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="SelectionBrush" Value="White"/>
+        <Setter Property="SelectionTextBrush" Value="Black"/>
+        <Setter Property="CaretBrush" Value="OrangeRed"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cHotKeySelector}">
+                    <Border x:Name="border">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Rectangle Grid.ColumnSpan="2"             Fill="White"    Opacity="0.2" RadiusX="2" RadiusY="2" />
+                            <Rectangle Grid.ColumnSpan="2" x:Name="bk" Fill="DarkGray" Opacity="0.1" RadiusX="2" RadiusY="2" />
+
+                            <ScrollViewer Grid.Column="0" x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
+                                          HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="4,0,0,0">
+                                <ScrollViewer.Effect>
+                                    <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="1"/>
+                                </ScrollViewer.Effect>
+                            </ScrollViewer>
+
+                            <!--选项-->
+                            <Border Grid.Column="1" CornerRadius="1.5" HorizontalAlignment="Right"
+                                    Margin="2,0,2,0">
+                                <ToggleButton DataContext="{Binding}"
+                                              Style="{StaticResource ToggleButtonStyle}"
+                                              IsChecked="{Binding KeyCodeType, 
+                                                                  RelativeSource={RelativeSource TemplatedParent},
+                                                                  Converter={StaticResource cHotKeySelector_converter_keycodetype2bool}}">
+                                    <i:Interaction.Triggers>
+                                        <i:DataTrigger Binding="{Binding KeyCodeType,
+                                                                         RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}"
+                                                       Value="CombineKeys">
+                                            <i:InvokeCommandAction Command="{Binding CheckedCommand, RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}"/>
+                                        </i:DataTrigger>
+                                        <i:DataTrigger Binding="{Binding KeyCodeType,
+                                                                         RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}"
+                                                       Value="Text">
+                                            <i:InvokeCommandAction Command="{Binding UnCheckedCommand, RelativeSource={RelativeSource AncestorType={x:Type local:cHotKeySelector}}}"/>
+                                        </i:DataTrigger>
+                                    </i:Interaction.Triggers>
+                                </ToggleButton>
+                            </Border>
+
+                            <!--气泡-->
+                            <Popup x:Name="PART_Popup" IsOpen="False"
+                                           AllowsTransparency="True"
+                                           Placement="Right"
+                                           HorizontalOffset="2"
+                                           VerticalOffset="2.5"
+                                           StaysOpen="True" 
+                                           Focusable="True">
+                                <Border x:Name="PopupContent"
+                                                Background="Black"
+                                                BorderBrush="White" 
+                                                BorderThickness="1" 
+                                                CornerRadius="2.5"
+                                                Padding="3,2,3,2">
+                                    <TextBlock Text="{Binding KeyCodeType, RelativeSource={RelativeSource TemplatedParent}}"
+                                               Foreground="White"/>
+                                </Border>
+                            </Popup>
+                            
+                        </Grid>
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Opacity" TargetName="bk" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="Opacity" TargetName="bk" Value="0.8"/>
+                        </Trigger>
+                        
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsOpen"
+                                                                        Storyboard.TargetName="PART_Popup">
+                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0.2" Value="False"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="PopupContent"
+                                                         Duration="0:0:0.15"
+                                                         To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsOpen"
+                                                                        Storyboard.TargetName="PART_Popup">
+                                            <DiscreteBooleanKeyFrame  KeyTime="0:0:0.0" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="PopupContent"
+                                                         Duration="0:0:0.05"
+                                                         To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

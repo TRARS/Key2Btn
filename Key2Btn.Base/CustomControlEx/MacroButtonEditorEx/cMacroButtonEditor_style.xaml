@@ -1,0 +1,102 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:local="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonEditorEx" 
+                    xmlns:normalbuttonex="clr-namespace:Key2Btn.Base.CustomControlExBase.NormalButtonEx"
+                    xmlns:contextmenuex="clr-namespace:Key2Btn.Base.CustomControlExBase.ContextMenuEx" 
+                    xmlns:textboxex="clr-namespace:Key2Btn.Base.CustomControlExBase.TextBoxEx" xmlns:macrobuttonex="clr-namespace:Key2Btn.Base.CustomControlEx.MacroButtonEx">
+
+    <local:cMacroButtonEditor_converter_double2int x:Key="cMacroButtonEditor_converter_double2int"/>
+    <local:cMacroButtonEditor_converter_rgb2hsv x:Key="cMacroButtonEditor_converter_rgb2hsv"/>
+    <local:cMacroButtonEditor_converter_actkey2bool x:Key="cMacroButtonEditor_converter_actkey2bool"/>
+    
+    <Style TargetType="{x:Type local:cMacroButtonEditor}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cMacroButtonEditor}">
+                    <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}"
+                          Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="propnamebox"/>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition SharedSizeGroup="propvaluebox" Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!--左列-->
+                        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="Name:" Foreground="White"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="KeyCode:" Foreground="White"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="Color:" Foreground="White"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="MWScale:" Foreground="White"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="ActKey:" Foreground="White"/>
+                        
+                        <!--右列-->
+                        <textboxex:cTextBox Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch"
+                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                        <textboxex:cHotKeySelector Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch"
+                                                   Text="{Binding KeyCode, UpdateSourceTrigger=PropertyChanged}"
+                                                   KeyCodeType="{Binding Type}" 
+                                                   IsEnabled="{Binding ActionKey, 
+                                                                       Converter={StaticResource cMacroButtonEditor_converter_actkey2bool},
+                                                                       UpdateSourceTrigger=PropertyChanged}"/>
+                        <textboxex:cColorPicker Grid.Column="2" Grid.Row="2" HorizontalAlignment="Stretch" IsReadOnly="True"
+                                                Text="{Binding Color, UpdateSourceTrigger=PropertyChanged}"
+                                                ColorHSVA="{Binding Color, 
+                                                                    Converter={StaticResource cMacroButtonEditor_converter_rgb2hsv},
+                                                                    UpdateSourceTrigger=PropertyChanged, 
+                                                                    Mode=OneWayToSource}">
+                        </textboxex:cColorPicker>
+                        <textboxex:cIntegerUpDown Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" IsReadOnly="True"
+                                                  Text="{Binding MaxWidthScale, UpdateSourceTrigger=PropertyChanged}"
+                                                  IntegerValue="{Binding MaxWidthScale, UpdateSourceTrigger=PropertyChanged,
+                                                                         Converter={StaticResource cMacroButtonEditor_converter_double2int}}"/>
+                        <textboxex:cActionKeySelector Grid.Column="2" Grid.Row="4" HorizontalAlignment="Stretch" IsReadOnly="True"
+                                                      Text="{Binding ActionKey, UpdateSourceTrigger=PropertyChanged}"
+                                                      ActionPackets="{Binding ActionPacketList, Mode=OneWay}"/>
+                        
+                        <!--关闭-->
+                        <normalbuttonex:cNormalButton Grid.Column="0" Grid.Row="5"
+                                                      MinWidth="25" Width="25" Height="{Binding Width, RelativeSource={RelativeSource Self}}" 
+                                                      Margin="0,3,0,2">
+
+                            <Path Data="M751 157.4c45.2 6.4 92.2-1.8 129.1 4.5 59.7 10.2 90 61 83.5 135.8h-72.3c-2 132.7-1.1 264.1-1.1 397.3 0 67.2 5.6 137.8-1.1 198.1-6.3 56.9-48.1 91.6-99 100.1-50.3 8.4-117 2.2-172.5 2.2-116.4 0-234.3 2.3-348.3 0-55.5-1.1-96.5-18.7-121.3-52.3-24.8-33.6-22.3-84.4-22.3-144.7V297.7h-69c-11.2-68.8 18.6-118.3 69-134.6 37.1-12 86.5-2.3 139.1-5.6-4.3-74.1-0.2-130.3 63.4-138 28.5-3.4 66.5 0 101.3 0H632c38.6 0 78.1-3.7 97.9 13.4 27.3 23.5 20.2 78 21.1 124.5zM333.7 92.8v66.8H682V89.5H334.8c-1.3 0.2-1.2 1.7-1.1 3.3z m-67.9 212.6v424c0 36.2-8.3 113.4 13.4 129.1 8.6 6.2 30.9 7.2 41.2 0 22.4-15.6 14.5-90.6 14.5-128V302.1H267c-1.4 0.1-1.3 1.7-1.2 3.3z m207 0V716c0 32.4-7.5 109.1 5.6 131.3 8.6 14.7 37.8 21.3 52.3 10 19.7-15.4 11.1-96.6 11.1-130.2V302h-67.9c-1.3 0.2-1.2 1.8-1.1 3.4z m209.2 0v429.5c0 44-8.6 111.5 20 123.5 12.5 5.3 34.6 1.2 40.1-3.3 18.7-15.4 10-97.8 10-130.2V302.1h-69c-1.3 0.1-1.2 1.7-1.1 3.3z" 
+                                  Stretch="Uniform"
+                                  Fill="LightBlue"
+                                  IsHitTestVisible="False"
+                                  Margin="1.5"/>
+                            
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding CloseMenuCommand, RelativeSource={RelativeSource AncestorType={x:Type contextmenuex:cContextMenu}}}"/>
+                                    <i:InvokeCommandAction Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type contextmenuex:cContextMenu}}}"
+                                                               CommandParameter="{Binding Parent, RelativeSource={RelativeSource AncestorType={x:Type contextmenuex:cContextMenu}}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </normalbuttonex:cNormalButton>
+
+                        <normalbuttonex:cNormalButton Grid.ColumnSpan="3" Grid.Row="5"
+                                                      HorizontalAlignment="Stretch"
+                                                      Text="Close"
+                                                      Margin="28,3,0,2">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding CloseMenuCommand, RelativeSource={RelativeSource AncestorType={x:Type contextmenuex:cContextMenu}}}"/>
+                                    <i:InvokeCommandAction Command="{Binding ResetFocusCommand, RelativeSource={RelativeSource AncestorType={x:Type contextmenuex:cContextMenu}}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </normalbuttonex:cNormalButton>
+                            
+                        
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

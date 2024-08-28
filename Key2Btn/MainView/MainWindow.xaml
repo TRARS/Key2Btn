@@ -1,0 +1,106 @@
+﻿<Window x:Class="Key2Btn.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Key2Btn.MainView" 
+        xmlns:designtimeviewmodel="clr-namespace:Key2Btn.MainView.DesignTimeViewModels"
+        xmlns:titlebarex="clr-namespace:Key2Btn.MainView.Views.TitleBarEx"
+        xmlns:rainbowlineex="clr-namespace:Key2Btn.MainView.Views.RainbowLineEx" 
+        xmlns:clientex="clr-namespace:Key2Btn.MainView.Views.ClientEx"
+        xmlns:vm="clr-namespace:Key2Btn.MainView.ViewModels" 
+        xmlns:contextmenuex="clr-namespace:Key2Btn.Base.CustomControlExBase.ContextMenuEx;assembly=Key2Btn.Base" 
+        xmlns:trayiconex="clr-namespace:Key2Btn.MainView.Views.TrayIconEx"
+        mc:Ignorable="d"
+        SnapsToDevicePixels="True" 
+        WindowStartupLocation="Manual" 
+        Background="Transparent"
+        
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="true" 
+        Topmost="True" 
+        
+        AllowsTransparency="True"
+        WindowStyle="None" 
+        ResizeMode="CanMinimize"
+        
+        HorizontalAlignment="Left" 
+        ShowInTaskbar="False" 
+        
+        Title="Ket2Btn" 
+        
+        MaxWidth="1366"
+        MaxHeight="768"
+        
+        d:MinHeight="64"
+        d:MinWidth="256"
+        d:SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance Type={x:Type designtimeviewmodel:MainWindowVM}, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:RectConverter x:Key="RectConverter"/>
+            <local:BorderBrushConverter x:Key="BorderBrushConverter"/>
+
+            <DataTemplate DataType="{x:Type vm:uTitleBarVM}">
+                <titlebarex:uTitleBar/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:uRainbowLineVM}">
+                <rainbowlineex:uRainbowLine/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:uClientVM}">
+                <clientex:uClient/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TaskbarIconVM}">
+                <trayiconex:uTrayIcon/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Opacity="{Binding WindowOpacity, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay}">
+        <Border x:Name="PART_Border" BorderThickness="1" CornerRadius="5"
+                Margin="0" Panel.ZIndex="2"
+                BorderBrush="{Binding IsActive, 
+                                      RelativeSource={RelativeSource AncestorType={x:Type Window}}, 
+                                      Converter={StaticResource BorderBrushConverter}}"
+                d:BorderBrush="AliceBlue">
+        </Border>
+
+        <Border x:Name="PART_Background" BorderThickness="0" Background="#FF1F2021" CornerRadius="7"
+                Margin="0" Panel.ZIndex="0"/>
+
+        <!--上中下结构-->
+        <Grid Margin="1" Panel.ZIndex="1">
+            <Grid.Clip>
+                <RectangleGeometry RadiusX="4.5" RadiusY="4.5">
+                    <RectangleGeometry.Rect>
+                        <MultiBinding Converter="{StaticResource RectConverter}">
+                            <Binding Path="ActualWidth" ElementName="PART_Border"/>
+                            <Binding Path="ActualHeight" ElementName="PART_Border"/>
+                            <Binding Path="BorderThickness" ElementName="PART_Border"/>
+                        </MultiBinding>
+                    </RectangleGeometry.Rect>
+                </RectangleGeometry>
+            </Grid.Clip>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--标题栏-->
+            <ContentControl Grid.Row="0" Content="{Binding SubViewModelList[0]}" Visibility="{Binding SubViewModelList[0].Visibility}"
+                            x:Name="Chrome"/>
+
+            <!--分界线-->
+            <ContentControl Grid.Row="1" Content="{Binding SubViewModelList[1]}" Visibility="{Binding Visibility, ElementName=Chrome}"/>
+
+            <!--客户区-->
+            <ContentControl Grid.Row="2" Content="{Binding SubViewModelList[2]}"/>
+
+            <!--托盘图标-->
+            <ContentControl Grid.RowSpan="3" Content="{Binding SubViewModelList[3]}" d:Content="{x:Null}"/>
+        </Grid>
+    </Grid>
+</Window>

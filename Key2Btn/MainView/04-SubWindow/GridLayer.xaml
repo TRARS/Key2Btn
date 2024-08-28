@@ -1,0 +1,54 @@
+﻿<Window x:Class="Key2Btn.MainView.SubWindow.GridLayer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Key2Btn.MainView.SubWindow"
+        xmlns:effect="clr-namespace:Key2Btn.Base.CustomEffect;assembly=Key2Btn.Base"
+        mc:Ignorable="d"
+        
+        Background="Transparent"
+        UseLayoutRounding="true" 
+        Topmost="True" 
+        AllowsTransparency="True"
+        WindowStyle="None" 
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+
+        ShowActivated="False"
+        IsHitTestVisible="False"
+        
+        Title="GridLayer"
+
+        d:Height="90" 
+        d:Width="160">
+    <Window.Resources>
+        <DrawingBrush x:Key="GridTile" Stretch="None" TileMode="Tile" Viewport="0,0 16,16" ViewportUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <LineGeometry StartPoint="0,0" EndPoint="16,16" />
+                            <LineGeometry StartPoint="0,16" EndPoint="16,0" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                    <GeometryDrawing.Pen>
+                        <Pen Thickness="1" Brush="White"/>
+                    </GeometryDrawing.Pen>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </Window.Resources>
+
+    <Grid Opacity="{Binding WindowOpacity, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay}">
+        <Border Background="{Binding GridTile, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay}"
+                d:Background="{StaticResource GridTile}"
+                d:Effect="{x:Null}">
+            <Border.Effect>
+                <BlurEffect Radius="{Binding BlurRadius, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay}"/>
+            </Border.Effect>
+        </Border>
+
+        <Border BorderBrush="Yellow" BorderThickness="1" CornerRadius="5"/>
+    </Grid>
+</Window>
